@@ -10,7 +10,7 @@ public class History {
 
     private static File messageHistory = new File("D:\\Project\\Messenger\\Server\\src\\yarovoy\\messageHistory.txt");
 
-    public void addMessageInHistory (String message){
+    public void addMessageInHistory(String message){
         DateFormat df = new SimpleDateFormat();
         try {
             Writer pw = new FileWriter(messageHistory, true);
@@ -25,7 +25,7 @@ public class History {
     }
 
 
-    public static int countLine(){
+    public static synchronized  int countLine(){
         int lineNumber = 0;
         try{
             FileReader fileReader = new FileReader(messageHistory);
@@ -41,7 +41,7 @@ public class History {
     }
 
 
-    public static String[] getLastMess() throws FileNotFoundException {
+    public static synchronized String[] getLastMess() throws FileNotFoundException {
         Scanner scanner = new Scanner(messageHistory);
         int o = 0;
         String[] lastMess = new String[10];

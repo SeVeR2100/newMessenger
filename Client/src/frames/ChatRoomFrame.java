@@ -11,10 +11,13 @@ import java.awt.event.ActionListener;
 public class ChatRoomFrame extends JFrame{
 
     private final ConnectionClient net;
-    private String response;
+    private String response = null;
+    private String action = "ACTION";
     private String user;
-    private final JPanel panel = new JPanel();
+    private final JPanel southPanel = new JPanel();
+    private final JPanel eastPanel = new JPanel();
     private final JTextArea inMess = new JTextArea();
+    private final JTextArea logs = new JTextArea(5,5);
     private final JTextField outMess = new JTextField(40);
     private final JLabel name = new JLabel();
     private final JButton send = new JButton();
@@ -30,17 +33,25 @@ public class ChatRoomFrame extends JFrame{
         setTitle("Держи краба!");
         setSize(600,400);
         setLocationRelativeTo(null);
+
         main.setLayout(new BorderLayout());
-        panel.setLayout(new FlowLayout());
+        southPanel.setLayout(new FlowLayout());
         inMess.setEditable(false);
         inMess.setLineWrap(true);
         main.add(inMess, BorderLayout.CENTER);
-        panel.add(outMess);
+        southPanel.add(outMess);
         name.setText("Добро пожаловать, " + this.user + " !");
         main.add(name, BorderLayout.NORTH);
         send.setText("Отправить");
-        panel.add(send );
-        main.add(panel,BorderLayout.SOUTH);
+        southPanel.add(send );
+        main.add(southPanel,BorderLayout.SOUTH);
+
+        eastPanel.setLayout(new BoxLayout(eastPanel,BoxLayout.PAGE_AXIS));
+        eastPanel.add(new JLabel("Активность     "));
+        logs.setEditable(false);
+        logs.setBackground(Color.green);
+        eastPanel.add(logs);
+        main.add(eastPanel,BorderLayout.EAST);
 
         send.addActionListener(new ActionListener() {
             @Override
@@ -50,12 +61,18 @@ public class ChatRoomFrame extends JFrame{
             }
         });
 
+        getRootPane().setDefaultButton(send);
+
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(!thread.isInterrupted())
-                    inMess.append(net.read()+ "\r\n");
-
+                String s;
+                while(!thread.isInterrupted()) {
+                    s = net.read();
+                    if (!action.matches(s)) {
+                        inMess.append(s + "\r\n");
+                    } else logs.append(net.read());
+                }
             }
         });
         thread.start();

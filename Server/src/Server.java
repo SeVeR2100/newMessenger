@@ -42,7 +42,7 @@ public class Server {
                                             } else{
                                                 new User(name,pass);
                                                 net.write("ACCEPT");
-                                                startClient(net);
+                                                startClient(net, name);
                                             }
                                         } catch (Exception e ) {
                                             e.printStackTrace();
@@ -54,7 +54,7 @@ public class Server {
                                             String pass = net.read();
                                             if(User.userAlreadyReg(name,pass) == true ){
                                                 net.write("ACCEPT");
-                                                startClient(net);
+                                                startClient(net, name);
                                             } else{
                                                 net.write("ERROR");
                                             }
@@ -73,7 +73,7 @@ public class Server {
         }
     }
 
-    private static void startClient(ConnectionServer net){
+    private static void startClient(ConnectionServer net, String name){
         users.add(net);
         System.out.println("Обслуживание клиента почалось!! " + net.toString());
         try {
@@ -84,12 +84,16 @@ public class Server {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        sendAllClients("ACTION");
+        sendAllClients(name + " online");
         while(!net.isClosed()) {
             String message = df.format(new Date()) + " | " + net.read();
             history.addMessageInHistory(message);
             sendAllClients(message);
             }
-            users.remove(net);
+        users.remove(net);
+        sendAllClients("ACTION");
+        sendAllClients(name + "offline");
         System.out.println("Обслуживание клиента завершилось!! " + net.toString());
             try {
                 net.close();
