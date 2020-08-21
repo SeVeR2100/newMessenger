@@ -14,7 +14,7 @@ public class ChatRoomFrame extends JFrame{
     private String response;
     private String user;
     private final JPanel panel = new JPanel();
-    private final JTextArea inMess = new JTextArea("Здесь будут писюки!!!");
+    private final JTextArea inMess = new JTextArea();
     private final JTextField outMess = new JTextField(40);
     private final JLabel name = new JLabel();
     private final JButton send = new JButton();

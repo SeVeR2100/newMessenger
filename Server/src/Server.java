@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static yarovoy.History.getLastMess;
+
 public class Server {
 
     private static ArrayList<ConnectionServer> users = new ArrayList<>();
@@ -74,12 +76,21 @@ public class Server {
     private static void startClient(ConnectionServer net){
         users.add(net);
         System.out.println("Обслуживание клиента почалось!! " + net.toString());
+        try {
+            String [] lastMess = getLastMess();
+            for(String s : lastMess){
+                net.write(s);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         while(!net.isClosed()) {
             String message = df.format(new Date()) + " | " + net.read();
             history.addMessageInHistory(message);
             sendAllClients(message);
             }
             users.remove(net);
+        System.out.println("Обслуживание клиента завершилось!! " + net.toString());
             try {
                 net.close();
             } catch (IOException e) {

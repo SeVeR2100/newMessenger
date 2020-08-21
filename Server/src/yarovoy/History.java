@@ -4,6 +4,7 @@ package yarovoy;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Scanner;
 
 public class History {
 
@@ -23,6 +24,7 @@ public class History {
 
     }
 
+
     public static int countLine(){
         int lineNumber = 0;
         try{
@@ -38,11 +40,22 @@ public class History {
         return lineNumber;
     }
 
-    public static void main(String[] args) {
-        System.out.println(countLine());
+
+    public static String[] getLastMess() throws FileNotFoundException {
+        Scanner scanner = new Scanner(messageHistory);
+        int o = 0;
+        String[] lastMess = new String[10];
+        int countLine = countLine();
+        for (int i = 1; i<=countLine;i++){
+            String s = scanner.nextLine();
+            if (i >= countLine-9 ){
+                lastMess[o] = s;
+                o++;
+            }
+        }
+
+        return lastMess;
     }
-
-
 
 
 }
