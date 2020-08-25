@@ -1,13 +1,12 @@
 import connection.ConnectionServer;
+import userSafety.User;
 import yarovoy.History;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import static yarovoy.History.getLastMess;
 
 public class Server {
@@ -25,8 +24,10 @@ public class Server {
 
             System.out.println("Server Started!");
 
+
             while(true) {
                 try ( ConnectionServer net = new ConnectionServer(server) ){
+                    requsetLogic.NetworkGifter netGifter = new requsetLogic.NetworkGifter(net);
                     Thread newThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -73,7 +74,7 @@ public class Server {
         }
     }
 
-    private static void startClient(ConnectionServer net, String name){
+    public static void startClient(ConnectionServer net, String name){
         users.add(net);
         System.out.println("Обслуживание клиента почалось!! " + net.toString());
         try {
