@@ -1,3 +1,5 @@
+package userSafety;
+
 import userSafety.Crypto;
 
 import java.io.*;

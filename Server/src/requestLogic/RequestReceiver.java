@@ -14,10 +14,12 @@ public class RequestReceiver{
         switch (request) {
             case "New_Acc":
                 new NewAccount(net).action();
+                break;
             case "Check_Acc":
                 new CheckAccount(net).action();
+                break;
             default:
-                throw new RuntimeException("Invalid header");
+                net.write("ERROR");
         }
     }
 }

@@ -21,10 +21,11 @@ public class CheckAccount implements Logic{
             if(User.userAlreadyReg(name,pass) == true ){
                 net.write("ACCEPT");
                 startClient(net, name);
+            } else{
+                net.write("ERROR");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

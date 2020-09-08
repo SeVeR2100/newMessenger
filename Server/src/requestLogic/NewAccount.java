@@ -18,7 +18,9 @@ public class NewAccount implements Logic {
         try {
             String name = net.read();
             String pass = net.read();
-            if(User.userAlreadyReg(name,pass) == false){
+            if(User.userAlreadyReg(name,pass) == true){
+                net.write("ERROR");
+            } else{
                 new User(name,pass);
                 net.write("ACCEPT");
                 startClient(net, name);
@@ -26,6 +28,5 @@ public class NewAccount implements Logic {
         } catch (Exception e ) {
             e.printStackTrace();
         }
-
     }
 }

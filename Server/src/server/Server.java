@@ -1,3 +1,5 @@
+package server;
+
 import connection.ConnectionServer;
 import userSafety.User;
 import yarovoy.History;
@@ -27,43 +29,13 @@ public class Server {
 
             while(true) {
                 try ( ConnectionServer net = new ConnectionServer(server) ){
-                    requsetLogic.NetworkGifter netGifter = new requsetLogic.NetworkGifter(net);
                     Thread newThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            requestLogic.RequestReceiver logic = new requestLogic.RequestReceiver(net);
                             while (!server.isClosed()) {
                                 String request = net.read();
-                                switch (request){
-                                    case "New_Acc" :
-                                        try {
-                                            String name = net.read();
-                                            String pass = net.read();
-                                            if(User.userAlreadyReg(name,pass) == true){
-                                                net.write("ERROR");
-                                            } else{
-                                                new User(name,pass);
-                                                net.write("ACCEPT");
-                                                startClient(net, name);
-                                            }
-                                        } catch (Exception e ) {
-                                            e.printStackTrace();
-                                        }
-                                        break;
-                                    case "Check_Acc" :
-                                        try {
-                                            String name = net.read();
-                                            String pass = net.read();
-                                            if(User.userAlreadyReg(name,pass) == true ){
-                                                net.write("ACCEPT");
-                                                startClient(net, name);
-                                            } else{
-                                                net.write("ERROR");
-                                            }
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                        break;
-                                }
+                                logic.requestReceiver(request);
                             }
                         }
                     });
