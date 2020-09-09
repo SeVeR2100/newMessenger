@@ -3,7 +3,6 @@ package requestLogic;
 import connection.ConnectionServer;
 import userSafety.User;
 
-import static server.Server.startClient;
 
 public class NewAccount implements Logic {
 
@@ -23,7 +22,7 @@ public class NewAccount implements Logic {
             } else{
                 new User(name,pass);
                 net.write("ACCEPT");
-                startClient(net, name);
+                server.startClient.startClient(net, name);
             }
         } catch (Exception e ) {
             e.printStackTrace();

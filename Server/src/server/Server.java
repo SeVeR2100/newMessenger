@@ -1,21 +1,15 @@
 package server;
 
 import connection.ConnectionServer;
-import yarovoy.History;
 import java.io.*;
 import java.net.ServerSocket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import static yarovoy.History.getLastMess;
+import static server.startClient.isChatReady;
+
 
 public class Server {
 
-    private static ArrayList<ConnectionServer> users = new ArrayList<>();
-    private static History history = new History();
-    private static DateFormat df = new SimpleDateFormat();
-    private static boolean chatIsReady;
+
+    private static boolean chatIsReady = isChatReady();
 
 
 
@@ -25,7 +19,6 @@ public class Server {
         try (ServerSocket server = new ServerSocket(8000)) {
 
             System.out.println("Server Started!");
-
 
             while(true) {
                 try ( ConnectionServer net = new ConnectionServer(server) ){
@@ -45,44 +38,6 @@ public class Server {
         } catch (RuntimeException e) {
         }
     }
-
-    public static void startClient(ConnectionServer net, String name){
-        chatIsReady = true;
-        users.add(net);
-        System.out.println("Обслуживание клиента почалось!! " + net.toString());
-        try {
-            String [] lastMess = getLastMess();
-            for(String s : lastMess){
-                net.write(s);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        sendAllClients("ACTION");
-        sendAllClients(name + " online");
-        while(!net.isClosed()) {
-            String message = df.format(new Date()) + " | " + net.read();
-            history.addMessageInHistory(message);
-            sendAllClients(message);
-            }
-        users.remove(net);
-        sendAllClients("ACTION");
-        sendAllClients(name + "offline");
-        System.out.println("Обслуживание клиента завершилось!! " + net.toString());
-            try {
-                net.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    private static void sendAllClients(String msg) {
-        for (ConnectionServer u : users) {
-            u.write(msg);
-        }
-
-    }
-
 }
 
 

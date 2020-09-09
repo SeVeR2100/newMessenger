@@ -3,7 +3,6 @@ package requestLogic;
 import connection.ConnectionServer;
 import userSafety.User;
 
-import static server.Server.startClient;
 
 public class CheckAccount implements Logic{
 
@@ -20,7 +19,7 @@ public class CheckAccount implements Logic{
             String pass = net.read();
             if(User.userAlreadyReg(name,pass) == true ){
                 net.write("ACCEPT");
-                startClient(net, name);
+                server.startClient.startClient(net, name);
             } else{
                 net.write("ERROR");
             }
