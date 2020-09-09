@@ -1,7 +1,6 @@
 package server;
 
 import connection.ConnectionServer;
-import userSafety.User;
 import yarovoy.History;
 import java.io.*;
 import java.net.ServerSocket;
@@ -16,6 +15,7 @@ public class Server {
     private static ArrayList<ConnectionServer> users = new ArrayList<>();
     private static History history = new History();
     private static DateFormat df = new SimpleDateFormat();
+    private static boolean chatIsReady;
 
 
 
@@ -33,7 +33,7 @@ public class Server {
                         @Override
                         public void run() {
                             requestLogic.RequestReceiver logic = new requestLogic.RequestReceiver(net);
-                            while (!server.isClosed()) {
+                            while (!chatIsReady==true) {
                                 String request = net.read();
                                 logic.requestReceiver(request);
                             }
@@ -47,6 +47,7 @@ public class Server {
     }
 
     public static void startClient(ConnectionServer net, String name){
+        chatIsReady = true;
         users.add(net);
         System.out.println("Обслуживание клиента почалось!! " + net.toString());
         try {

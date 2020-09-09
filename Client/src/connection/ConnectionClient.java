@@ -44,6 +44,9 @@ public class ConnectionClient implements Closeable {
 
     @Override
     public void close() throws IOException {
+        reader.close();
+        writer.close();
+        socket.close();
 
     }
 

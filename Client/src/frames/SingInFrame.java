@@ -16,16 +16,18 @@ public class SingInFrame extends JFrame{
 
     public SingInFrame(ConnectionClient net){
 
-
         this.net = net;
         jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jframe.setVisible(true);
         jframe.setTitle("Держи краба!");
+
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
+
         jframe.setBounds(dimension.width/2 - 200,dimension.height/2 - 100,400,200);
         jframe.setLayout(null);
         jframe.setResizable(false);
+
         JLabel label = new JLabel("Авторизация");
         label.setBounds(160,0,500,50);
         jframe.add(label);

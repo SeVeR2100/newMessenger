@@ -1,7 +1,5 @@
 package userSafety;
 
-import userSafety.Crypto;
-
 import java.io.*;
 import java.util.Scanner;
 
@@ -28,30 +26,6 @@ public class User {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static boolean checkUserPass(String name, String password) throws Exception {
-        String checkName = name ;
-        String checkPass = password;
-        try {
-            Reader fr = new FileReader(userFile);
-            Scanner scanner = new Scanner(fr);
-            while(scanner.hasNextLine()) {
-                String delimetr = " ";
-                String [] searchMatch = scanner.nextLine().split(delimetr);
-                String encryptedPass = Crypto.decrypt(searchMatch[1]);
-                if (checkName.matches(searchMatch[0]) & checkPass.matches(encryptedPass) ) {
-                    return true;
-                }
-                fr.close();
-            }
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
 
