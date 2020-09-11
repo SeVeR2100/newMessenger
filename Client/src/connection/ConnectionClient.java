@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
 public class ConnectionClient implements Closeable {
 
     private String ip = "192.168.0.101";
-    private int port = 8000;
+    private int port = 7777;
     private Socket socket;
     private static BufferedReader reader;
     private static BufferedWriter writer;
@@ -43,11 +43,15 @@ public class ConnectionClient implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
-        reader.close();
-        writer.close();
-        socket.close();
+    public void close() {
+        try {
+            reader.close();
+            writer.close();
+            socket.close();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isClosed(){

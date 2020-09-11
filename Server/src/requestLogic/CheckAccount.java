@@ -1,7 +1,7 @@
 package requestLogic;
 
 import connection.ConnectionServer;
-import userSafety.User;
+import userSafety.UserAllreadyReg;
 
 
 public class CheckAccount implements Logic{
@@ -17,7 +17,7 @@ public class CheckAccount implements Logic{
         try {
             String name = net.read();
             String pass = net.read();
-            if(User.userAlreadyReg(name,pass) == true ){
+            if(UserAllreadyReg.userAlreadyReg(name,pass) == true ){
                 net.write("ACCEPT");
                 server.startClient.startClient(net, name);
             } else{

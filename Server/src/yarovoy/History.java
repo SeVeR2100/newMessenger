@@ -10,7 +10,7 @@ public class History {
 
     private static File messageHistory = new File("D:\\Project\\Messenger\\Server\\src\\yarovoy\\messageHistory.txt");
 
-    public void addMessageInHistory(String message){
+    public synchronized void addMessageInHistory(String message){
         DateFormat df = new SimpleDateFormat();
         try {
             Writer pw = new FileWriter(messageHistory, true);

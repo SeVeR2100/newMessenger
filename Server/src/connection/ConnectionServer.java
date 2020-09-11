@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
 
-public class ConnectionServer implements Closeable  {
+public class ConnectionServer {
     private Socket socket;
     private BufferedReader reader;
     private BufferedWriter writer;
@@ -31,7 +31,7 @@ public class ConnectionServer implements Closeable  {
         }
     }
 
-    public String read (){
+    public String read () throws RuntimeException{
         try {
             return reader.readLine();
         } catch (IOException e) {
@@ -39,9 +39,21 @@ public class ConnectionServer implements Closeable  {
         }
     }
 
-    @Override
     public void close() throws IOException {
+        reader.close();
+        writer.close();
+        socket.close();
 
+    }
+
+    public void disconnect(){
+        try {
+            reader.close();
+            writer.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isClosed(){

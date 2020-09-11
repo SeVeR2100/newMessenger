@@ -30,6 +30,7 @@ public class startClient {
             for (String s : lastMess) {
                 net.write(s);
             }
+            System.out.println("Message history delivery!");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -40,10 +41,11 @@ public class startClient {
             history.addMessageInHistory(message);
             sac.sendAllClients(message);
         }
-        users.remove(net);
         sac.sendAllClients("ACTION");
         sac.sendAllClients(name + "offline");
         System.out.println("Обслуживание клиента завершилось!! " + net.toString());
+        users.remove(net);
+        System.out.println("test");
         try {
             net.close();
         } catch (IOException e) {

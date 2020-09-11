@@ -2,6 +2,7 @@ package requestLogic;
 
 import connection.ConnectionServer;
 import userSafety.User;
+import userSafety.UserAllreadyReg;
 
 
 public class NewAccount implements Logic {
@@ -17,7 +18,7 @@ public class NewAccount implements Logic {
         try {
             String name = net.read();
             String pass = net.read();
-            if(User.userAlreadyReg(name,pass) == true){
+            if(UserAllreadyReg.userAlreadyReg(name,pass) == true){
                 net.write("ERROR");
             } else{
                 new User(name,pass);
