@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.Charset;
 
-public class ConnectionClient implements Closeable {
+public class ConnectionClient {
 
     private String ip = "192.168.0.101";
     private int port = 7777;
@@ -41,8 +41,7 @@ public class ConnectionClient implements Closeable {
             throw new RuntimeException(e);
         }
     }
-
-    @Override
+    
     public void close() {
         try {
             reader.close();

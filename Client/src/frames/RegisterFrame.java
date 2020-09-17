@@ -18,6 +18,7 @@ public class RegisterFrame extends JFrame{
     public RegisterFrame(ConnectionClient net){
         this.net = net;
         jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        Runtime.getRuntime().addShutdownHook(new ProcessorHook());
         jframe.setVisible(true);
         jframe.setTitle("Держи краба!");
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -70,10 +71,21 @@ public class RegisterFrame extends JFrame{
         System.out.println(response);
         if (response.matches(accept)) {
             jframe.dispose();
-            new ChatRoomFrame(net, name);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    new ChatRoomFrame(net, name);
+                }
+            });
         } else
             JOptionPane.showMessageDialog(jframe,"Аккаунт с таким именем уже существует!!");
 
+    }
+    public class ProcessorHook extends Thread {
+        @Override
+        public void run() {
+            net.close();
+        }
     }
 
 }

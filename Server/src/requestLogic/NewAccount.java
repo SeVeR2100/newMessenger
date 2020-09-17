@@ -5,16 +5,24 @@ import userSafety.User;
 import userSafety.UserAllreadyReg;
 
 
-public class NewAccount implements Logic {
+public class NewAccount implements ILogic {
 
+    private static NewAccount INSTANCE;
     private static ConnectionServer net;
 
-    public NewAccount(ConnectionServer net) {
+    private NewAccount(ConnectionServer net) {
         this.net = net;
     }
 
+    public static NewAccount getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new NewAccount(net);
+        }
+        return INSTANCE;
+    }
+
     @Override
-    public void action() {
+    public void action(ConnectionServer net) {
         try {
             String name = net.read();
             String pass = net.read();

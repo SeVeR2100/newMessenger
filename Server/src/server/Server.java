@@ -16,7 +16,7 @@ public class Server {
     private ConnectionServer net;
     private static int threadCount = 0;
 
-    public static void main(String[] args) throws IOException, SocketException {
+    public static void main(String[] args) throws IOException {
 
 
         try (ServerSocket server = new ServerSocket(7777)) {
@@ -31,12 +31,11 @@ public class Server {
                    public void run() {
                        threadCount++;
                        System.out.println("Поток номер: "+threadCount+" заработал");
-                       RequestReceiver logic = new RequestReceiver(net);
+
                        while (!net.isClosed()) {
                            try {
                                String request = net.read();
-                               System.out.println(request);
-                               logic.requestReceiver(request);
+                               new RequestReceiver(net,request);
                            } catch (Exception e) {
                                e.printStackTrace();
                            } finally {

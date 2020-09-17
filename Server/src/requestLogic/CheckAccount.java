@@ -4,16 +4,23 @@ import connection.ConnectionServer;
 import userSafety.UserAllreadyReg;
 
 
-public class CheckAccount implements Logic{
-
+public class CheckAccount implements ILogic {
+    private static CheckAccount INSTANCE;
     private static ConnectionServer net;
 
-    public CheckAccount(ConnectionServer net) {
+    private CheckAccount(ConnectionServer net) {
         this.net = net;
     }
 
+    public static CheckAccount getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new CheckAccount(net);
+        }
+        return INSTANCE;
+    }
+
     @Override
-    public void action() {
+    public void action(ConnectionServer net) {
         try {
             String name = net.read();
             String pass = net.read();

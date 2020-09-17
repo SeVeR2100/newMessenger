@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class ChatRoomFrame extends JFrame{
 
@@ -22,13 +23,14 @@ public class ChatRoomFrame extends JFrame{
     private final JLabel name = new JLabel();
     private final JButton send = new JButton();
     private final Container main = getContentPane();
-    Thread thread = new Thread();
+    private Thread thread;
 
 
     public ChatRoomFrame (ConnectionClient net,String user) {
         this.net = net;
         this.user = user;
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        Runtime.getRuntime().addShutdownHook(new ProcessorHook());
         setVisible(true);
         setTitle("Держи краба!");
         setSize(600,400);
@@ -66,16 +68,28 @@ public class ChatRoomFrame extends JFrame{
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String s;
                 while(!thread.isInterrupted()) {
-                    s = net.read();
-                    if (!action.matches(s)) {
-                        inMess.append(s + "\r\n");
-                    } else logs.append(net.read());
+                    try {
+                        String answer = net.read();
+                        if (!action.matches(answer)) {
+                            inMess.append(answer + "\r\n");
+                        }  else  {
+                            logs.append(net.read());
+                        }
+                    } catch (RuntimeException e){
+
+                    }
                 }
             }
         });
         thread.start();
 
+    }
+    public class ProcessorHook extends Thread {
+        @Override
+        public void run() {
+            thread.interrupt();
+            net.close();
+        }
     }
 }
