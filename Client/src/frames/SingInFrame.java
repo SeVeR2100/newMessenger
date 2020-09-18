@@ -13,6 +13,15 @@ public class SingInFrame extends JFrame {
     private JFrame jframe = new JFrame();
     private String error = "ERROR";
     private String accept = "ACCEPT";
+    JLabel label = new JLabel();
+    JLabel name = new JLabel("Имя:");
+    JLabel pass = new JLabel("Пароль:");
+    JTextArea nameField = new JTextArea(1, 30);
+    JPasswordField passField = new JPasswordField(30);
+    JButton enterButton = new JButton("Войти");
+
+
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
 
     public SingInFrame(ConnectionClient net) {
 
@@ -22,36 +31,39 @@ public class SingInFrame extends JFrame {
         jframe.setVisible(true);
         jframe.setTitle("Держи краба!");
 
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
-
         jframe.setBounds(dimension.width / 2 - 200, dimension.height / 2 - 100, 400, 200);
         jframe.setLayout(null);
         jframe.setResizable(false);
 
-        JLabel label = new JLabel("Авторизация");
+        label.setText("Авторизация");
         label.setBounds(160, 0, 500, 50);
         jframe.add(label);
-        JLabel name = new JLabel("Имя:");
+
+        name.setText("Имя:");
         name.setBounds(10, 20, 50, 50);
-        JLabel pass = new JLabel("Пароль:");
         jframe.add(name);
+
+        pass.setText("Пароль:");
         pass.setBounds(10, 60, 500, 50);
         jframe.add(pass);
-        JTextArea nameField = new JTextArea(1, 30);
+
         nameField.setBounds(90, 36, 240, 20);
         jframe.add(nameField);
-        JPasswordField passField = new JPasswordField(30);
+
         passField.setBounds(90, 76, 240, 20);
         jframe.add(passField);
-        JButton enterButton = new JButton("Войти");
+
+        enterButton.setText("Войти");
         enterButton.setBounds(300, 120, 70, 30);
         jframe.add(enterButton);
 
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tryLogIn(nameField.getText(), String.valueOf(passField.getPassword()));
+                if(!String.valueOf(passField.getPassword()).matches("") || !nameField.getText().matches("")) {
+                    tryLogIn(nameField.getText(), String.valueOf(passField.getPassword()));
+                } else JOptionPane.showMessageDialog(jframe, "Введены не корректные данные");
             }
         });
         JButton RegistrationButton = new JButton("Регистрация");
@@ -68,9 +80,7 @@ public class SingInFrame extends JFrame {
     }
 
     public void tryLogIn(String name, String pass) {
-        net.write("Check_Acc");
-        net.write(name);
-        net.write(String.valueOf(pass));
+        net.write("Check_Acc///]]]"+name+"<<<>>>"+pass);
         String response = net.read();
         System.out.println(response);
         if (response.matches(accept)) {
@@ -84,7 +94,7 @@ public class SingInFrame extends JFrame {
     public class ProcessorHook extends Thread {
         @Override
         public void run() {
-           net.close();
+            net.close();
         }
     }
 }

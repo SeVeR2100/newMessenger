@@ -1,5 +1,6 @@
 import connection.ConnectionClient;
 import frames.RegisterFrame;
+import frames.SingInFrame;
 
 
 import javax.swing.*;
@@ -12,7 +13,7 @@ public class Client {
             @Override
             public void run() {
                 ConnectionClient net = new ConnectionClient();
-                RegisterFrame s1 = new RegisterFrame(net);
+                SingInFrame s1 = new SingInFrame(net);
 
             }
         });

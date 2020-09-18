@@ -15,13 +15,11 @@ import static yarovoy.History.getLastMess;
 public class startClient {
 
     private static ArrayList<ConnectionServer> users = sendAllClients.getUsers();
-    private static boolean chatIsReady;
     private static DateFormat df = new SimpleDateFormat();
     private static History history = new History();
 
 
     public static void startClient(ConnectionServer net, String name) {
-        chatIsReady = true;
         sendAllClients sac = new sendAllClients();
         users.add(net);
         System.out.println("Обслуживание клиента почалось!! " + net.toString());
@@ -37,10 +35,25 @@ public class startClient {
         sac.sendAllClients("ACTION");
         sac.sendAllClients(name + " online");
         while (!net.isClosed()) {
-            String message = df.format(new Date()) + " | " + net.read();
-            history.addMessageInHistory(message);
-            sac.sendAllClients(message);
+            try {
+                Thread.sleep(25);
+                System.out.println("test");
+                String message = df.format(new Date()) + " | " + net.read();
+                history.addMessageInHistory(message);
+                sac.sendAllClients(message);
+                System.out.println("test");
+                Thread.sleep(25);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    net.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
         sac.sendAllClients("ACTION");
         sac.sendAllClients(name + "offline");
         System.out.println("Обслуживание клиента завершилось!! " + net.toString());
@@ -48,15 +61,9 @@ public class startClient {
         System.out.println("test");
         try {
             net.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-
-
-    public static boolean isChatReady(){
-        return chatIsReady;
     }
 
 

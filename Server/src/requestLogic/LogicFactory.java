@@ -1,19 +1,12 @@
 package requestLogic;
 
+import java.util.Map;
+import static requestLogic.RequestReceiver.getRequestMap;
+
 public class LogicFactory {
+    private static Map<String,ILogic> requestMap = getRequestMap();
 
     public static ILogic getImpl(String request) {
-        if (request!=null) {
-            switch (request) {
-                case "New_Acc":
-                    return NewAccount.getInstance();
-                case "Check_Acc":
-                    return CheckAccount.getInstance();
-                default:
-                    throw new NullPointerException();
-            }
-        } else{
-            throw new NullPointerException("Клиент закрывает соединение");
-        }
+        return requestMap.get(request);
     }
 }

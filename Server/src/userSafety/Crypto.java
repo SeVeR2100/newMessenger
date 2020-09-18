@@ -22,11 +22,11 @@ public class Crypto {
         return str2.toString();
     }
 
-    public static String publicEncrypt(String password){
+    public static String getEncrypt(String password){
         return privateEncrypt(password);
     }
 
-    public static String publicDecrypt(String password){
+    public static String getDecrypt(String password){
         return privateDecrypt(password);
     }
 

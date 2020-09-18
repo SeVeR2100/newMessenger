@@ -1,7 +1,7 @@
 package userSafety;
 
 import java.io.*;
-import static userSafety.Crypto.publicEncrypt;
+import static userSafety.Crypto.getEncrypt;
 
 public class User {
     private int id;
@@ -14,7 +14,7 @@ public class User {
     public User(String name, String password) throws Exception {
         this.id += count;
         this.name = name;
-        this.password = publicEncrypt(password);
+        this.password = getEncrypt(password);
         count++;
         try {
             Writer pw = new FileWriter(userFile, true);

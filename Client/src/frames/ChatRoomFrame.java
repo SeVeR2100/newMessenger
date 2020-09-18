@@ -1,20 +1,18 @@
 package frames;
 
-
 import connection.ConnectionClient;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+
 
 public class ChatRoomFrame extends JFrame{
 
     private final ConnectionClient net;
     private String response = null;
-    private String action = "ACTION";
-    private String user;
+    private final String action = "ACTION";
+    private final String user;
     private final JPanel southPanel = new JPanel();
     private final JPanel eastPanel = new JPanel();
     private final JTextArea inMess = new JTextArea();
@@ -23,7 +21,7 @@ public class ChatRoomFrame extends JFrame{
     private final JLabel name = new JLabel();
     private final JButton send = new JButton();
     private final Container main = getContentPane();
-    private Thread thread;
+    private final Thread thread;
 
 
     public ChatRoomFrame (ConnectionClient net,String user) {
@@ -54,6 +52,7 @@ public class ChatRoomFrame extends JFrame{
         logs.setBackground(Color.green);
         eastPanel.add(logs);
         main.add(eastPanel,BorderLayout.EAST);
+        getRootPane().setDefaultButton(send);
 
         send.addActionListener(new ActionListener() {
             @Override
@@ -63,21 +62,24 @@ public class ChatRoomFrame extends JFrame{
             }
         });
 
-        getRootPane().setDefaultButton(send);
 
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(!thread.isInterrupted()) {
+                while(!net.isClosed()) {
                     try {
+                        Thread.sleep(25);
+                        System.out.println("Ждёт ответа!");
                         String answer = net.read();
+                        System.out.println("Ответ получен!");
                         if (!action.matches(answer)) {
                             inMess.append(answer + "\r\n");
                         }  else  {
                             logs.append(net.read());
                         }
-                    } catch (RuntimeException e){
-
+                        Thread.sleep(25);
+                    } catch (RuntimeException | InterruptedException e){
+                        thread.interrupt();
                     }
                 }
             }
@@ -90,6 +92,7 @@ public class ChatRoomFrame extends JFrame{
         public void run() {
             thread.interrupt();
             net.close();
+            System.out.println("Нажал на крестик");
         }
     }
 }

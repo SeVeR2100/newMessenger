@@ -39,11 +39,14 @@ public class ConnectionServer {
         }
     }
 
-    public void close() throws IOException {
-        reader.close();
-        writer.close();
-        socket.close();
-
+    public void close()  {
+        try {
+            reader.close();
+            writer.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void disconnect(){
