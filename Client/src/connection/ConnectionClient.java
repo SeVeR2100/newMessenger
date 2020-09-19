@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
 public class ConnectionClient {
 
     private String ip = "192.168.0.101";
-    private int port = 7777;
+    private int port = 7775;
     private Socket socket;
     private static BufferedReader reader;
     private static BufferedWriter writer;
@@ -34,11 +34,11 @@ public class ConnectionClient {
         }
     }
 
-    public String read (){
+    public String read () throws RuntimeException{
         try {
             return reader.readLine();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new NullPointerException("lalalalalala");
         }
     }
     

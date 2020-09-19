@@ -5,6 +5,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 
 public class ChatRoomFrame extends JFrame{
@@ -62,37 +65,39 @@ public class ChatRoomFrame extends JFrame{
             }
         });
 
-
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(!net.isClosed()) {
+                while(!thread.isInterrupted()) {
                     try {
-                        Thread.sleep(25);
                         System.out.println("Ждёт ответа!");
                         String answer = net.read();
-                        System.out.println("Ответ получен!");
+                        System.out.println(answer);
                         if (!action.matches(answer)) {
                             inMess.append(answer + "\r\n");
-                        }  else  {
+                        } else {
                             logs.append(net.read());
                         }
-                        Thread.sleep(25);
-                    } catch (RuntimeException | InterruptedException e){
+                    } catch (RuntimeException e){
                         thread.interrupt();
                     }
                 }
             }
         });
+        thread.setDaemon(true);
         thread.start();
 
     }
     public class ProcessorHook extends Thread {
         @Override
         public void run() {
+            System.out.println(1);
             thread.interrupt();
-            net.close();
+            System.out.println(2);
+//            net.close();
+            System.out.println(3);
             System.out.println("Нажал на крестик");
+            System.exit(0);
         }
     }
 }

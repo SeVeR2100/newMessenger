@@ -14,9 +14,11 @@ public class Client {
             public void run() {
                 ConnectionClient net = new ConnectionClient();
                 SingInFrame s1 = new SingInFrame(net);
+                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
             }
         });
+        System.out.println("ffffffffffffffffffffffffffffffffff");
 
 
     }

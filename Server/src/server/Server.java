@@ -4,52 +4,55 @@ import connection.ConnectionServer;
 import requestLogic.RequestReceiver;
 import java.io.*;
 import java.net.ServerSocket;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class Server {
 
-    private static ConnectionServer net;
+    private ConnectionServer net;
     private static int threadCount = 0;
+    private static List<ConnectionServer> users = new LinkedList<>();
 
-    public static void main(String[] args) throws IOException {
+    public void start () throws IOException {
 
-
-        try (ServerSocket server = new ServerSocket(7777)) {
+        try (ServerSocket server = new ServerSocket(7775)) {
 
             System.out.println("Server Started!");
 
-            while(!server.isClosed()) {
+            while(true) {
                 net = new ConnectionServer(server);
                 System.out.println("Новое подключение");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        threadCount++;
-                        System.out.println("Поток номер: " + threadCount + " заработал");
-                        while (!Thread.interrupted()) {
+                        int currentTread = ++threadCount;
+                        System.out.println("Поток номер: " + currentTread + " заработал");
+                        while (!net.isClosed()) {
+                            System.out.println("zashol v potok");
                             try {
-                                Thread.sleep(25);
                                 String request = net.read();
                                 new RequestReceiver(net, request);
-                                Thread.sleep(25);
                             } catch (NullPointerException e) {
-                               // net.close();
-                                System.out.println("поток "+threadCount+" закрыт");
-                                Thread.interrupted();
-                                throw new NullPointerException("Клиент завершил соединение");
+                                System.out.println("поток "+ currentTread + " закрыт1");
+                                net.close();
+                                System.out.println("disconnect client ");
+                                throw new NullPointerException("Клиент "+ net.toString() +" завершил соединение");
                             } catch (Exception e) {
-                               // net.close();
-                                System.out.println("поток "+threadCount+" закрыт");
-                                Thread.interrupted();
                                 e.printStackTrace();
                             }
                         }
-
+                        net.close();
+                        System.out.println("disconnect verified client ");
                     }
                 }).start();
             }
         } catch (RuntimeException e) {
         }
+    }
+
+    public static List<ConnectionServer> getUsers() {
+        return users;
     }
 }
 
