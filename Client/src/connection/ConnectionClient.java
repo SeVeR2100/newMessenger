@@ -42,15 +42,11 @@ public class ConnectionClient {
         }
     }
     
-    public void close() {
-        try {
+    public void close() throws IOException {
             reader.close();
             writer.close();
             socket.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public boolean isClosed(){

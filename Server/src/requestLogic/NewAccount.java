@@ -7,24 +7,16 @@ import userSafety.UserAllreadyReg;
 
 public class NewAccount implements ILogic {
 
-    private static NewAccount INSTANCE;
     private static ConnectionServer net;
     private String text ;
     private String delimiter = "<<<>>>";
 
-    private NewAccount(ConnectionServer net) {
+    public NewAccount(ConnectionServer net) {
         this.net = net;
     }
 
-    public static NewAccount getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new NewAccount(net);
-        }
-        return INSTANCE;
-    }
-
     @Override
-    public void action(ConnectionServer net) {
+    public void action() {
         Parser parser = new Parser();
         text = parser.getText();
         try {

@@ -1,11 +1,8 @@
 package server;
 
 import connection.ConnectionServer;
-import yarovoy.History;
+import requestLogic.RequestReceiver;
 import java.io.FileNotFoundException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import static server.Server.getUsers;
 import static yarovoy.History.getLastMess;
@@ -13,14 +10,10 @@ import static yarovoy.History.getLastMess;
 public class startClient {
 
     private static List<ConnectionServer> users = getUsers();
-    private static DateFormat df = new SimpleDateFormat();
-    private static History history = new History();
-    private static ConnectionServer net ;
 
 
     public static void startClient(ConnectionServer net, String name) {
         SendAllClients sac = new SendAllClients();
-        users.add(net);
         System.out.println("Обслуживание клиента "+ net.toString() +" почалось!! " );
         try {
             String[] lastMess = getLastMess();
@@ -37,18 +30,20 @@ public class startClient {
             try {
                 System.out.println("test");
                 String request = net.read();
+                RequestReceiver requestReceiver = RequestReceiver.getRequestReceiver();
+                requestReceiver.getReceiver(request);
                 System.out.println(request);
-                String message = df.format(new Date()) + " | " + request;
-                history.addMessageInHistory(message);
-                sac.sendAllClients(message);
-                System.out.println("test2");
             } catch (NullPointerException e) {
                 users.remove(net);
                 System.out.println("удаление клиента из списка");
                 sac.sendAllClients("ACTION");
                 sac.sendAllClients(name + "offline");
-                throw new NullPointerException("Клиент "+net.toString()+ " завершил соединение");
+                throw new NullPointerException("Клиент "+net.toString()+ " завершил соединение2");
             } catch (Exception e) {
+                users.remove(net);
+                System.out.println("удаление клиента из списка");
+                sac.sendAllClients("ACTION");
+                sac.sendAllClients(name + "offline");
                 e.printStackTrace();
             }
         }

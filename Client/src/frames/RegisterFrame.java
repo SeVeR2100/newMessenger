@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 
 public class RegisterFrame extends JFrame{
@@ -60,7 +61,7 @@ public class RegisterFrame extends JFrame{
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!nameField.getText().matches("") || !passField.getText().matches("")) {
+                if(!nameField.getText().matches("") & !passField.getText().matches("")) {
                     trySingIn(nameField.getText(), passField.getText());
                 } else JOptionPane.showMessageDialog(jframe, "Введены не корректные данные");
             }
@@ -103,7 +104,11 @@ public class RegisterFrame extends JFrame{
     public class ProcessorHook extends Thread {
         @Override
         public void run() {
-            net.close();
+            try {
+                net.close();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 

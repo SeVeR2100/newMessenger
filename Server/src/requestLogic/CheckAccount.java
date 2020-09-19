@@ -5,23 +5,17 @@ import userSafety.UserAllreadyReg;
 
 
 public class CheckAccount implements ILogic {
-    private static CheckAccount INSTANCE;
+
     private static ConnectionServer net;
     private String text ;
     private String delimiter = "<<<>>>";
 
-    private CheckAccount() {
-    }
-
-    public static CheckAccount getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new CheckAccount();
-        }
-        return INSTANCE;
+    public CheckAccount(ConnectionServer net) {
+        this.net = net;
     }
 
     @Override
-    public void action(ConnectionServer net) {
+    public void action() {
         Parser parser = new Parser();
         text = parser.getText();
         try {

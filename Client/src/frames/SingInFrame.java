@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 
 public class SingInFrame extends JFrame {
@@ -13,15 +14,13 @@ public class SingInFrame extends JFrame {
     private JFrame jframe = new JFrame();
     private String error = "ERROR";
     private String accept = "ACCEPT";
-    JLabel label = new JLabel();
-    JLabel name = new JLabel("Имя:");
-    JLabel pass = new JLabel("Пароль:");
-    JTextArea nameField = new JTextArea(1, 30);
-    JPasswordField passField = new JPasswordField(30);
-    JButton enterButton = new JButton("Войти");
-
-
-    Toolkit toolkit = Toolkit.getDefaultToolkit();
+    private JLabel label = new JLabel();
+    private JLabel name = new JLabel("Имя:");
+    private JLabel pass = new JLabel("Пароль:");
+    private JTextArea nameField = new JTextArea(1, 30);
+    private JPasswordField passField = new JPasswordField(30);
+    private JButton enterButton = new JButton("Войти");
+    private Toolkit toolkit = Toolkit.getDefaultToolkit();
 
     public SingInFrame(ConnectionClient net) {
 
@@ -61,7 +60,7 @@ public class SingInFrame extends JFrame {
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!String.valueOf(passField.getPassword()).matches("") || !nameField.getText().matches("")) {
+                if(!String.valueOf(passField.getPassword()).matches("") & !nameField.getText().matches("")) {
                     tryLogIn(nameField.getText(), String.valueOf(passField.getPassword()));
                 } else JOptionPane.showMessageDialog(jframe, "Введены не корректные данные");
             }
@@ -94,7 +93,11 @@ public class SingInFrame extends JFrame {
     public class ProcessorHook extends Thread {
         @Override
         public void run() {
-            net.close();
+            try {
+                net.close();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 }

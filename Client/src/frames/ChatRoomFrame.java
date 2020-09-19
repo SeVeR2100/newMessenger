@@ -60,7 +60,7 @@ public class ChatRoomFrame extends JFrame{
         send.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                net.write(user + " : " + outMess.getText());
+                net.write("New_Message///]]]" + user + " : " + outMess.getText());
                 outMess.setText("");
             }
         });
@@ -68,7 +68,7 @@ public class ChatRoomFrame extends JFrame{
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(!thread.isInterrupted()) {
+                while(!net.isClosed()) {
                     try {
                         System.out.println("Ждёт ответа!");
                         String answer = net.read();
@@ -80,6 +80,8 @@ public class ChatRoomFrame extends JFrame{
                         }
                     } catch (RuntimeException e){
                         thread.interrupt();
+                    } finally {
+                        System.out.println("FINALLY");
                     }
                 }
             }
@@ -91,13 +93,11 @@ public class ChatRoomFrame extends JFrame{
     public class ProcessorHook extends Thread {
         @Override
         public void run() {
-            System.out.println(1);
-            thread.interrupt();
-            System.out.println(2);
-//            net.close();
-            System.out.println(3);
-            System.out.println("Нажал на крестик");
-            System.exit(0);
+            try{
+                net.close();
+            } catch (IOException e){
+                e.printStackTrace();
+            }
         }
     }
 }

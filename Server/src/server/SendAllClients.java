@@ -8,12 +8,10 @@ public class SendAllClients {
 
     private static List<ConnectionServer> users ;
 
-
     public void sendAllClients(String msg) {
         users = getUsers();
-
-        for (ConnectionServer u : users) {
-                u.write(msg);
+        for (ConnectionServer user : users) {
+                user.write(msg);
         }
     }
 }

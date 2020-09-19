@@ -1,6 +1,7 @@
 import connection.ConnectionClient;
 import frames.RegisterFrame;
 import frames.SingInFrame;
+import org.w3c.dom.ls.LSOutput;
 
 
 import javax.swing.*;
@@ -14,12 +15,7 @@ public class Client {
             public void run() {
                 ConnectionClient net = new ConnectionClient();
                 SingInFrame s1 = new SingInFrame(net);
-                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
             }
         });
-        System.out.println("ffffffffffffffffffffffffffffffffff");
-
-
     }
 }

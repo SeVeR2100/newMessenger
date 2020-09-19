@@ -44,20 +44,21 @@ public class ConnectionServer {
             reader.close();
             writer.close();
             socket.close();
+            System.out.println("Disconnect from close");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-//    public void disconnect(){
-//        try {
-//            reader.close();
-//            writer.close();
-//            socket.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public void disconnect(){
+        try {
+            reader.close();
+            writer.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public boolean isClosed(){
         return socket.isClosed();
