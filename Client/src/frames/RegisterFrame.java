@@ -2,12 +2,13 @@ package frames;
 
 import connection.ConnectionClient;
 import responseLogic.ResponseReceiver;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class RegisterFrame extends JFrame{
+public class RegisterFrame extends JFrame {
 
     private final ConnectionClient net;
     private JFrame jframe = new JFrame();
@@ -16,14 +17,14 @@ public class RegisterFrame extends JFrame{
     private JLabel name = new JLabel();
     private JLabel pass = new JLabel();
     private JTextArea nameField = new JTextArea(1, 30);
-    private JTextArea passField = new JTextArea(1,30);
+    private JTextArea passField = new JTextArea(1, 30);
     private JButton enterButton = new JButton();
     private JButton registrationButton = new JButton();
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
     private ResponseReceiver responseReceiver;
 
 
-    public RegisterFrame(ConnectionClient net){
+    public RegisterFrame(ConnectionClient net) {
         this.net = net;
         responseReceiver = new ResponseReceiver(net);
         jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -32,7 +33,7 @@ public class RegisterFrame extends JFrame{
         jframe.setTitle("Держи краба!");
 
         Dimension dimension = toolkit.getScreenSize();
-        jframe.setBounds(dimension.width/2 - 200,dimension.height/2 - 100,400,200);
+        jframe.setBounds(dimension.width / 2 - 200, dimension.height / 2 - 100, 400, 200);
 
         jframe.setLayout(null);
         jframe.setResizable(false);
@@ -60,7 +61,7 @@ public class RegisterFrame extends JFrame{
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!nameField.getText().matches("") & !passField.getText().matches("")) {
+                if (!nameField.getText().matches("") & !passField.getText().matches("")) {
                     trySingIn(nameField.getText(), passField.getText());
                 } else JOptionPane.showMessageDialog(jframe, "Введены некорректные данные");
             }
@@ -77,8 +78,8 @@ public class RegisterFrame extends JFrame{
         });
     }
 
-    public void trySingIn(String name,String pass){
-        net.write("New_Acc///]]]"+name+"<<<>>>"+pass);
+    public void trySingIn(String name, String pass) {
+        net.write("New_Acc///]]]" + name + "<<<>>>" + pass);
         String response = net.read();
         String result = responseReceiver.getResponse(response);
         System.out.println(response);
@@ -86,13 +87,13 @@ public class RegisterFrame extends JFrame{
             jframe.dispose();
             new ChatRoomFrame(net, name);
         } else
-            JOptionPane.showMessageDialog(jframe,"Аккаунт с таким именем уже существует!!");
+            JOptionPane.showMessageDialog(jframe, "Аккаунт с таким именем уже существует!!");
     }
 
     public class ProcessorHook extends Thread {
         @Override
         public void run() {
-                net.close();
+            net.close();
         }
     }
 

@@ -6,7 +6,7 @@ public class Verification implements ILogic {
     private ConnectionClient net;
 
     public Verification(ConnectionClient net) {
-        this.net=net;
+        this.net = net;
     }
 
     @Override

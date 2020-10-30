@@ -10,7 +10,7 @@ public class History {
 
     private static File messageHistory = new File("D:\\Project\\Messenger\\Server\\src\\yarovoy\\messageHistory.txt");
 
-    public synchronized void addMessageInHistory(String message){
+    public synchronized void addMessageInHistory(String message) {
         DateFormat df = new SimpleDateFormat();
         try {
             Writer pw = new FileWriter(messageHistory, true);
@@ -25,23 +25,23 @@ public class History {
     }
 
 
-    public static synchronized  int countLine(){
+    public static synchronized int countLine() {
         int lineNumber = 0;
-        try{
+        try {
             FileReader fileReader = new FileReader(messageHistory);
             LineNumberReader lineNumberReader = new LineNumberReader(fileReader);
             lineNumber = 0;
-            while (lineNumberReader.readLine() != null){
+            while (lineNumberReader.readLine() != null) {
                 lineNumber++;
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return lineNumber;
     }
 
 
-    public static synchronized String[] getLastMess()  {
+    public static synchronized String[] getLastMess() {
         Scanner scanner = null;
         try {
             scanner = new Scanner(messageHistory);
@@ -51,9 +51,9 @@ public class History {
         int o = 0;
         String[] lastMess = new String[10];
         int countLine = countLine();
-        for (int i = 1; i<=countLine;i++){
+        for (int i = 1; i <= countLine; i++) {
             String s = scanner.nextLine();
-            if (i >= countLine-9 ){
+            if (i >= countLine - 9) {
                 lastMess[o] = s;
                 o++;
             }

@@ -3,7 +3,7 @@ package responseLogic;
 import connection.ConnectionClient;
 import frames.ChatRoomFrame;
 
-public class GetHistory implements ILogic{
+public class GetHistory implements ILogic {
     private ConnectionClient net;
 
     public GetHistory(ConnectionClient net) {
@@ -12,12 +12,13 @@ public class GetHistory implements ILogic{
 
     @Override
     public String action(String messageHistory) {
-        String[]history=messageHistory.split(" ///");
+        String[] history = messageHistory.split(" ///");
         setHistory(history);
         return history[0];
     }
-    public void setHistory(String[]array){
-        for(String s:array){
+
+    public void setHistory(String[] array) {
+        for (String s : array) {
             ChatRoomFrame.getInMess().append(s + "\r\n");
         }
     }

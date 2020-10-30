@@ -10,7 +10,7 @@ public class ConnectionServer {
     private BufferedReader reader;
     private BufferedWriter writer;
 
-    public ConnectionServer (ServerSocket server){
+    public ConnectionServer(ServerSocket server) {
         try {
             this.socket = server.accept();
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), Charset.forName("UTF-8")));
@@ -21,8 +21,8 @@ public class ConnectionServer {
 
     }
 
-    public void write (String string){
-        try{
+    public void write(String string) {
+        try {
             writer.write(string);
             writer.newLine();
             writer.flush();
@@ -31,7 +31,7 @@ public class ConnectionServer {
         }
     }
 
-    public String read () throws RuntimeException{
+    public String read() throws RuntimeException {
         try {
             return reader.readLine();
         } catch (IOException e) {
@@ -39,19 +39,19 @@ public class ConnectionServer {
         }
     }
 
-    public void close()  {
+    public void close() {
         try {
             reader.close();
             writer.close();
             socket.close();
-            System.out.println("Disconnect from close");
+            System.out.println("Дисконнект клиента, соединение завершено!");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    public boolean isClosed(){
+    public boolean isClosed() {
         return socket.isClosed();
     }
 }

@@ -10,22 +10,21 @@ public class UserAllreadyReg {
     static File userFile = new File("D:\\Project\\Messenger\\Server\\src\\userSafety\\userFile.txt");
 
     public static boolean userAlreadyReg(String name, String password) {
-        String checkName = name ;
+        String checkName = name;
         String checkPass = password;
         try {
             Reader fr = new FileReader(userFile);
             Scanner scanner = new Scanner(fr);
-            while(scanner.hasNextLine()) {
+            while (scanner.hasNextLine()) {
                 String delimetr = " ";
-                String [] searchMatch = scanner.nextLine().split(delimetr);
+                String[] searchMatch = scanner.nextLine().split(delimetr);
                 String encryptedPass = getDecrypt(searchMatch[1]);
-                if (checkName.matches(searchMatch[0]) & checkPass.matches(encryptedPass) ) {
+                if (checkName.matches(searchMatch[0]) & checkPass.matches(encryptedPass)) {
                     return true;
                 }
                 fr.close();
             }
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

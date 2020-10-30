@@ -16,7 +16,7 @@ public class NewMessage implements ILogic {
         return newMessage;
     }
 
-    public void setMess(String string){
+    public void setMess(String string) {
         ChatRoomFrame.getInMess().append(string + "\r\n");
     }
 }

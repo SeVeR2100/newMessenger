@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 
 public class SingInFrame extends JFrame {
@@ -62,7 +61,7 @@ public class SingInFrame extends JFrame {
         enterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!String.valueOf(passField.getPassword()).matches("") & !nameField.getText().matches("")) {
+                if (!String.valueOf(passField.getPassword()).matches("") & !nameField.getText().matches("")) {
                     tryLogIn(nameField.getText(), String.valueOf(passField.getPassword()));
                 } else JOptionPane.showMessageDialog(jframe, "Введены некорректные данные");
             }
@@ -80,7 +79,7 @@ public class SingInFrame extends JFrame {
     }
 
     public void tryLogIn(String name, String pass) {
-        net.write("Check_Acc///]]]"+name+"<<<>>>"+pass);
+        net.write("Check_Acc///]]]" + name + "<<<>>>" + pass);
         String response = net.read();
         String result = responseReceiver.getResponse(response);
         System.out.println(response);
@@ -94,7 +93,7 @@ public class SingInFrame extends JFrame {
     public class ProcessorHook extends Thread {
         @Override
         public void run() {
-                net.close();
+            net.close();
         }
     }
 }

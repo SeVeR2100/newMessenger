@@ -5,11 +5,13 @@ import prepareStartClient.StartClient;
 import server.Server;
 import userSafety.UserAllreadyReg;
 
+import static requestLogic.RequestReceiver.setCurrentUserName;
+
 
 public class CheckAccount implements ILogic {
 
     private static ConnectionServer net;
-    private String text ;
+    private String text;
     private String delimiter = "<<<>>>";
 
     public CheckAccount(ConnectionServer net) {
@@ -21,14 +23,16 @@ public class CheckAccount implements ILogic {
         Parser parser = new Parser();
         text = parser.getText();
         try {
-            String[]parsText=text.split(delimiter);
+            String[] parsText = text.split(delimiter);
             String name = parsText[0];
             String pass = parsText[1];
-            if(UserAllreadyReg.userAlreadyReg(name,pass) == true ){
+            if (UserAllreadyReg.userAlreadyReg(name, pass) == true) {
                 net.write("Verification///]]]ACCEPT");
-                Server.getUsers().add(net);
-               new StartClient(net,name).startClient();
-            } else{
+                Server.getUsersConnections().add(net);
+                setCurrentUserName(name);
+                Server.getUsersOnline().add(name);
+                new StartClient(net, name).startClient();
+            } else {
                 net.write("Verification///]]]ERROR");
             }
         } catch (Exception e) {

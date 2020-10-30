@@ -1,6 +1,7 @@
 package userSafety;
 
 import java.io.*;
+
 import static userSafety.Crypto.getEncrypt;
 
 public class User {
@@ -8,8 +9,7 @@ public class User {
     private String name;
     private String password;
     private static int count;
-    static File userFile = new File("D:\\Project\\Messenger\\Server\\src\\userSafety\\userFile.txt");
-
+    private static File userFile = new File("D:\\Project\\Messenger\\Server\\src\\userSafety\\userFile.txt");
 
     public User(String name, String password) throws Exception {
         this.id += count;
@@ -18,7 +18,7 @@ public class User {
         count++;
         try {
             Writer pw = new FileWriter(userFile, true);
-            pw.write( this.name + " " + this.password + "\r\n");
+            pw.write(this.name + " " + this.password + "\r\n");
             pw.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -26,5 +26,5 @@ public class User {
             e.printStackTrace();
         }
     }
-    
+
 }

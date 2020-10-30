@@ -1,13 +1,14 @@
 package connection;
 
 import java.io.*;
+import java.net.Inet4Address;
 import java.net.Socket;
 import java.nio.charset.Charset;
 import java.util.Scanner;
 
 public class ConnectionClient {
 
-    private String ip = "192.168.0.101";
+    private String ip;
     private int port = 7775;
     private Socket socket;
     private static BufferedReader reader;
@@ -16,6 +17,7 @@ public class ConnectionClient {
 
     public ConnectionClient (){
         try {
+            ip = Inet4Address.getLocalHost().getHostAddress();
             this.socket = new Socket(ip,port);
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), Charset.forName("UTF-8")));
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(),Charset.forName("UTF-8")));
