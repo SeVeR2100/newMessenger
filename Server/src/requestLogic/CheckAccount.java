@@ -1,6 +1,8 @@
 package requestLogic;
 
 import connection.ConnectionServer;
+import prepareStartClient.StartClient;
+import server.Server;
 import userSafety.UserAllreadyReg;
 
 
@@ -23,10 +25,11 @@ public class CheckAccount implements ILogic {
             String name = parsText[0];
             String pass = parsText[1];
             if(UserAllreadyReg.userAlreadyReg(name,pass) == true ){
-                net.write("ACCEPT");
-                server.startClient.startClient(net, name);
+                net.write("Verification///]]]ACCEPT");
+                Server.getUsers().add(net);
+               new StartClient(net,name).startClient();
             } else{
-                net.write("ERROR");
+                net.write("Verification///]]]ERROR");
             }
         } catch (Exception e) {
             e.printStackTrace();

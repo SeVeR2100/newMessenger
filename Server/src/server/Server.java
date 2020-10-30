@@ -9,11 +9,9 @@ import java.util.List;
 
 
 public class Server {
-
-    private ConnectionServer net;
     private static int threadCount = 0;
     private static List<ConnectionServer> users = new LinkedList<>();
-
+    private ConnectionServer net;
 
     public void start () throws IOException {
 
@@ -23,13 +21,11 @@ public class Server {
 
             while(true) {
                 net = new ConnectionServer(server);
-                users.add(net);
-                RequestReceiver requestReceiver = new RequestReceiver(net);
                 System.out.println("Новое подключение");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("zashol v potok");
+                        RequestReceiver requestReceiver = new RequestReceiver(net);
                         int currentTread = ++threadCount;
                         System.out.println("Поток номер: " + currentTread + " заработал");
                         while (!net.isClosed()) {
@@ -37,16 +33,12 @@ public class Server {
                                 String request = net.read();
                                 requestReceiver.getReceiver(request);
                             } catch (NullPointerException e) {
-                                System.out.println("поток "+ currentTread + " закрыт1");
                                 net.close();
-                                System.out.println("disconnect client ");
-                                throw new NullPointerException("Клиент "+ net.toString() +" завершил соединение1");
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                                users.remove(net);
+                                System.out.println("Клиент "+ net.toString() +" завершил соединение1");
                             }
                         }
-                        net.close();
-                        System.out.println("disconnect verified client ");
+                        System.out.println("Поток номер: " + currentTread + " завершён");
                     }
                 }).start();
             }

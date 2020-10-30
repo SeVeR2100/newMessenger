@@ -1,18 +1,16 @@
 package frames;
 
 import connection.ConnectionClient;
+import responseLogic.ResponseReceiver;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-
 
 public class RegisterFrame extends JFrame{
 
     private final ConnectionClient net;
     private JFrame jframe = new JFrame();
-    private String error = "ERROR";
     private String accept = "ACCEPT";
     private JLabel label = new JLabel();
     private JLabel name = new JLabel();
@@ -22,11 +20,12 @@ public class RegisterFrame extends JFrame{
     private JButton enterButton = new JButton();
     private JButton registrationButton = new JButton();
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
+    private ResponseReceiver responseReceiver;
 
 
     public RegisterFrame(ConnectionClient net){
-
         this.net = net;
+        responseReceiver = new ResponseReceiver(net);
         jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Runtime.getRuntime().addShutdownHook(new ProcessorHook());
         jframe.setVisible(true);
@@ -63,7 +62,7 @@ public class RegisterFrame extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 if(!nameField.getText().matches("") & !passField.getText().matches("")) {
                     trySingIn(nameField.getText(), passField.getText());
-                } else JOptionPane.showMessageDialog(jframe, "Введены не корректные данные");
+                } else JOptionPane.showMessageDialog(jframe, "Введены некорректные данные");
             }
         });
         registrationButton.setText("Авторизация");
@@ -73,42 +72,27 @@ public class RegisterFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 jframe.dispose();
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new SingInFrame(net);
-                    }
-                });
+                new SingInFrame(net);
             }
         });
-
     }
 
     public void trySingIn(String name,String pass){
         net.write("New_Acc///]]]"+name+"<<<>>>"+pass);
         String response = net.read();
+        String result = responseReceiver.getResponse(response);
         System.out.println(response);
-        if (response.matches(accept)) {
+        if (result.matches(accept)) {
             jframe.dispose();
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    new ChatRoomFrame(net, name);
-                }
-            });
+            new ChatRoomFrame(net, name);
         } else
             JOptionPane.showMessageDialog(jframe,"Аккаунт с таким именем уже существует!!");
-
     }
 
     public class ProcessorHook extends Thread {
         @Override
         public void run() {
-            try {
                 net.close();
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
         }
     }
 

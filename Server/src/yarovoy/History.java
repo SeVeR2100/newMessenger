@@ -41,8 +41,13 @@ public class History {
     }
 
 
-    public static synchronized String[] getLastMess() throws FileNotFoundException {
-        Scanner scanner = new Scanner(messageHistory);
+    public static synchronized String[] getLastMess()  {
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(messageHistory);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         int o = 0;
         String[] lastMess = new String[10];
         int countLine = countLine();

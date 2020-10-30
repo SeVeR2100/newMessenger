@@ -1,4 +1,4 @@
-package server;
+package prepareStartClient;
 
 import connection.ConnectionServer;
 import java.util.List;

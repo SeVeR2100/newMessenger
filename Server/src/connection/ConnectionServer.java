@@ -27,7 +27,7 @@ public class ConnectionServer {
             writer.newLine();
             writer.flush();
         } catch (IOException e) {
-  //          e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -50,15 +50,6 @@ public class ConnectionServer {
         }
     }
 
-    public void disconnect(){
-        try {
-            reader.close();
-            writer.close();
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public boolean isClosed(){
         return socket.isClosed();

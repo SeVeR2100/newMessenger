@@ -1,6 +1,8 @@
 package frames;
 
 import connection.ConnectionClient;
+import responseLogic.ResponseReceiver;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +14,6 @@ public class SingInFrame extends JFrame {
 
     private final ConnectionClient net;
     private JFrame jframe = new JFrame();
-    private String error = "ERROR";
     private String accept = "ACCEPT";
     private JLabel label = new JLabel();
     private JLabel name = new JLabel("Имя:");
@@ -21,10 +22,11 @@ public class SingInFrame extends JFrame {
     private JPasswordField passField = new JPasswordField(30);
     private JButton enterButton = new JButton("Войти");
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
+    private ResponseReceiver responseReceiver;
 
     public SingInFrame(ConnectionClient net) {
-
         this.net = net;
+        responseReceiver = new ResponseReceiver(net);
         jframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Runtime.getRuntime().addShutdownHook(new ProcessorHook());
         jframe.setVisible(true);
@@ -62,7 +64,7 @@ public class SingInFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if(!String.valueOf(passField.getPassword()).matches("") & !nameField.getText().matches("")) {
                     tryLogIn(nameField.getText(), String.valueOf(passField.getPassword()));
-                } else JOptionPane.showMessageDialog(jframe, "Введены не корректные данные");
+                } else JOptionPane.showMessageDialog(jframe, "Введены некорректные данные");
             }
         });
         JButton RegistrationButton = new JButton("Регистрация");
@@ -75,29 +77,24 @@ public class SingInFrame extends JFrame {
                 new RegisterFrame(net);
             }
         });
-
     }
 
     public void tryLogIn(String name, String pass) {
         net.write("Check_Acc///]]]"+name+"<<<>>>"+pass);
         String response = net.read();
+        String result = responseReceiver.getResponse(response);
         System.out.println(response);
-        if (response.matches(accept)) {
+        if (result.matches(accept)) {
             jframe.dispose();
             new ChatRoomFrame(net, name);
         } else
             JOptionPane.showMessageDialog(jframe, "Не верное имя или пароль!!");
-
     }
 
     public class ProcessorHook extends Thread {
         @Override
         public void run() {
-            try {
                 net.close();
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
         }
     }
 }

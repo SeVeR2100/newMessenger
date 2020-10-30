@@ -6,24 +6,20 @@ import java.util.Map;
 
 public class RequestReceiver{
 
-    private static RequestReceiver requestReceiver;
-    private static ConnectionServer net;
     private static Parser parser = new Parser();
     private static Map<String,ILogic> requestMap = new LinkedHashMap<>();
 
-
-
-
     public RequestReceiver(ConnectionServer net) {
-        this.net=net;
-        this.requestReceiver = this;
+
         NewMessage newMessage = new NewMessage(net);
         CheckAccount checkAccount = new CheckAccount(net);
         NewAccount newAccount = new NewAccount(net);
+        Disconnect disconnect = new Disconnect(net);
 
         requestMap.put("New_Acc",newAccount);
         requestMap.put("Check_Acc",checkAccount);
         requestMap.put("New_Message",newMessage);
+        requestMap.put("Disconnect",disconnect);
     }
 
     public void getReceiver(String requestFromClient){
@@ -36,7 +32,4 @@ public class RequestReceiver{
         return requestMap;
     }
 
-    public static RequestReceiver getRequestReceiver() {
-        return requestReceiver;
-    }
 }

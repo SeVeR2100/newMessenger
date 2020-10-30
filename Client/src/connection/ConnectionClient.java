@@ -3,6 +3,7 @@ package connection;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.Scanner;
 
 public class ConnectionClient {
 
@@ -11,13 +12,14 @@ public class ConnectionClient {
     private Socket socket;
     private static BufferedReader reader;
     private static BufferedWriter writer;
+    private static Scanner scan;
 
     public ConnectionClient (){
         try {
             this.socket = new Socket(ip,port);
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), Charset.forName("UTF-8")));
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream(),Charset.forName("UTF-8")));
-
+            scan = new Scanner(reader);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,11 +43,19 @@ public class ConnectionClient {
             throw new NullPointerException("lalalalalala");
         }
     }
+
+    public boolean scanNextLine(){
+        return scan.hasNextLine();
+    }
     
-    public void close() throws IOException {
+    public void close() {
+        try {
             reader.close();
             writer.close();
             socket.close();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
 
     }
 

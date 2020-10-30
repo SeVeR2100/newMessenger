@@ -1,7 +1,7 @@
 package requestLogic;
 
 import connection.ConnectionServer;
-import server.SendAllClients;
+import prepareStartClient.SendAllClients;
 import yarovoy.History;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,6 +29,6 @@ public class NewMessage implements ILogic{
         text = parser.getText();
         String message = df.format(new Date()) + " | " + text;
         history.addMessageInHistory(message);
-        sac.sendAllClients(message);
+        sac.sendAllClients("NewMessage///]]]"+message);
     }
 }
